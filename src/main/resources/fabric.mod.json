@@ -1,0 +1,31 @@
+{
+    "schemaVersion": 1,
+    "id": "shiroclient",
+    "version": "${version}",
+    "name": "ShiroClient",
+    "description": "Small little client mod! Planned to expand later on",
+    "authors": [
+        "Me!"
+    ],
+    "contact": {
+        "homepage": "https://shirodev.dev/",
+        "sources": "https://github.com/FabricMC/fabric-example-mod"
+    },
+    "license": "CC0-1.0",
+    "icon": "assets/modid/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "net.shirodev.shiroclient.ShiroClient"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=0.14.19",
+        "fabric-api": "*",
+        "minecraft": "~1.19.4",
+        "java": ">=17"
+    },
+    "suggests": {
+        "another-mod": "*"
+    }
+}
