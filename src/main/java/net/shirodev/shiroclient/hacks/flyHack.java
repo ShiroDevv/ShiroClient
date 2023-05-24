@@ -9,6 +9,7 @@ package net.shirodev.shiroclient.hacks;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.shirodev.shiroclient.Settings;
 import net.shirodev.shiroclient.Utils;
@@ -34,6 +35,8 @@ public class flyHack {
     public static void toggle() {
         // * Quicker way to change it from true -> false, or false -> true
         enabled = !enabled;
+
+        Settings.player = MinecraftClient.getInstance().player;
 
         // * If the module got enabled
         if (enabled == true) {

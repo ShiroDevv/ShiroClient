@@ -30,7 +30,7 @@ public class keybindHandler {
                 "key.shiroclient.fly",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_H,
-                "category.shiroclient.hacks"));
+                "category.shiroclient.mods"));
 
         // * Run this function at the end of all ticks.
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

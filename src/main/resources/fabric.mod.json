@@ -9,10 +9,10 @@
     ],
     "contact": {
         "homepage": "https://shirodev.dev/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
+        "sources": "https://github.com/ShiroDevv/ShiroClient"
     },
     "license": "CC0-1.0",
-    "icon": "assets/modid/icon.png",
+    "icon": "assets/shiroclient/icon.png",
     "environment": "*",
     "entrypoints": {
         "main": [
