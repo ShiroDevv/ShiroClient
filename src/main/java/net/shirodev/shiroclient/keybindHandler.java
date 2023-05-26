@@ -15,12 +15,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
-import net.shirodev.shiroclient.hacks.flyHack;
+import net.shirodev.shiroclient.mods.flyMod;
 
 //* Create the keybindHandler class
 public class keybindHandler {
     // * Create the variables
     private static KeyBinding flyKeyBinding;
+    private static KeyBinding tpKeyBinding;
     int ticksPassed = 0;
 
     // * Handler constructor
@@ -31,6 +32,9 @@ public class keybindHandler {
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_H,
                 "category.shiroclient.mods"));
+
+        tpKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.shiroclient.tp", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_Y, "category.shiroclient.mods"));
 
         // * Run this function at the end of all ticks.
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -49,9 +53,12 @@ public class keybindHandler {
             // * If we press the keybind toggle the mod
             if (flyKeyBinding.wasPressed()) {
                 // * Toggle the mod and tell the player it toggled
-                // TODO Change The message to a box that stays on screen.
-                flyHack.toggle();
-                client.player.sendMessage(Text.of("Toggled FlyHack to " + (flyHack.enabled ? "On!" : "Off!")), false);
+                Settings.flyHackMod.toggle();
+                client.player.sendMessage(Text.of("Toggled FlyMod to " + (flyMod.enabled ? "On!" : "Off!")), false);
+            }
+
+            if (tpKeyBinding.wasPressed()) {
+                Settings.tpMod.toggle();
             }
 
             ticksPassed += 1;

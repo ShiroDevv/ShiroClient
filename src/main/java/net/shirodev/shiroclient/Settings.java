@@ -8,7 +8,8 @@ package net.shirodev.shiroclient;
 
 //* Importing modules
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.shirodev.shiroclient.hacks.flyHack;
+import net.shirodev.shiroclient.mods.flyMod;
+import net.shirodev.shiroclient.mods.teleportMod;
 
 //* Creating the main settings class
 public class Settings {
@@ -17,11 +18,13 @@ public class Settings {
     public static ClientPlayerEntity player;
 
     // * Create mod holder
-    public static flyHack flyHackMod;
+    public static flyMod flyHackMod;
+    public static teleportMod tpMod;
 
     // * Set the available variables.
     public Settings() {
         INSTANCE = this;
-        flyHackMod = new flyHack();
+        flyHackMod = new flyMod();
+        tpMod = new teleportMod();
     }
 }

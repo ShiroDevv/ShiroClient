@@ -3,38 +3,40 @@
 //*  Modified by : 
 
 //!  Please leave credits.
-package net.shirodev.shiroclient.hacks;
+package net.shirodev.shiroclient.mods;
 
 //* Import modules
 import java.util.Timer;
 import java.util.TimerTask;
 
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.text.Text;
+import net.shirodev.shiroclient.BaseMod;
 import net.shirodev.shiroclient.Settings;
 import net.shirodev.shiroclient.Utils;
 
 //* Flyhack class
-//TODO Make base mod class.
-public class flyHack {
-    // * Create required variables
-    public static boolean enabled = false;
-
-    public static flyHack INSTANCE;
+public class flyMod extends BaseMod implements HudRenderCallback {
+    public static flyMod INSTANCE;
 
     static Timer fallTimer = new Timer();
 
     public static double count = 0d;
 
     // * Constructor
-    public flyHack() {
+    public flyMod() {
+        super();
         INSTANCE = this;
     }
 
     // * Toggle to run the mod, if enabled
-    public static void toggle() {
+    @Override
+    public void toggle() {
         // * Quicker way to change it from true -> false, or false -> true
-        enabled = !enabled;
+        super.toggle();
 
         Settings.player = MinecraftClient.getInstance().player;
 
@@ -65,18 +67,18 @@ public class flyHack {
                         return;
 
                     // * Check if we should send the packet
-                    if (prevCount == flyHack.count) {
+                    if (prevCount == flyMod.count) {
                         // * Increate the previous count
                         prevCount++;
                         // * Tell the server that we are at these coordinates
                         // ? We subtract -0.4 from the y value, since we need the server to thing we are
                         // falling.
                         Utils.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(Settings.player.getX(),
-                                Settings.player.getY() - 0.4, Settings.player.getZ(),
+                                Settings.player.getY() - 0.6, Settings.player.getZ(),
                                 Settings.player.isOnGround()));
                     } else {
                         // * Set the counts to be equal to eachother
-                        prevCount = flyHack.count;
+                        prevCount = flyMod.count;
                     }
                 }
             }, 200, 200);
@@ -88,5 +90,34 @@ public class flyHack {
             count = 0;
             fallTimer.cancel();
         }
+
+    }
+
+    @Override
+    public String getName() {
+        return "Fly";
+    }
+
+    @Override
+    public String getToolTip() {
+        return "Allows you to fly in survival!";
+    }
+
+    @Override
+    public String getHelpMessage() {
+        return """
+                Fly - Fly like you are in creative.
+                Can still take fall damage.
+                """;
+    }
+
+    @Override
+    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        client.player.sendMessage(Text.of("Drawing!"), false);
+
+        // if (enabled == true) {
+        client.inGameHud.getTextRenderer().drawWithShadow(matrixStack, "fly", 100, 100, 0, false);
+        // }
     }
 }
