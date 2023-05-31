@@ -9,6 +9,7 @@ package net.shirodev.shiroclient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.Packet;
+import net.shirodev.shiroclient.mixins.PacketManager;
 
 //* Utils class
 public class Utils {
@@ -25,5 +26,10 @@ public class Utils {
         }
 
         throw new IllegalStateException("Cannot send packets when not in game!");
+    }
+
+    public static void sendPacketImmediately(Packet<?> packet) {
+        ((PacketManager) MinecraftClient.getInstance().getNetworkHandler()).sendImmediately(packet, null);
+
     }
 }

@@ -5,12 +5,15 @@
     "name": "ShiroClient",
     "description": "Small little client mod! Planned to expand later on",
     "authors": [
-        "Me!"
+        "ShiroDev"
     ],
     "contact": {
         "homepage": "https://shirodev.dev/",
         "sources": "https://github.com/ShiroDevv/ShiroClient"
     },
+    "mixins": [
+        "shiroclient.mixins.json"
+    ],
     "license": "CC0-1.0",
     "icon": "assets/shiroclient/icon.png",
     "environment": "*",
