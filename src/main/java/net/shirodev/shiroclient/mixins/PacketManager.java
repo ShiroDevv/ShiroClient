@@ -10,5 +10,5 @@ import net.minecraft.network.packet.Packet;
 @Mixin(ClientConnection.class)
 public interface PacketManager {
     @Invoker("sendImmediately")
-    void sendImmediately(Packet<?> packet, PacketCallbacks callbacks);
+    void _sendImmediately(Packet<?> packet, PacketCallbacks callbacks);
 }

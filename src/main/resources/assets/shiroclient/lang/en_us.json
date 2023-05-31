@@ -1,5 +1,7 @@
 {
     "category.shiroclient.mods": "ShiroClient Mods",
     "key.shiroclient.fly": "Fly Toggle",
-    "key.shiroclient.tp": "Teleport key"
+    "key.shiroclient.tp": "Teleport key",
+    "key.shiroclient.speed": "Speed Key",
+    "key.shiroclient.boatfly": "Boatfly Key"
 }

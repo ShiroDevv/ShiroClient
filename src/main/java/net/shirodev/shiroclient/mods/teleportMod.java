@@ -22,9 +22,6 @@
 
 package net.shirodev.shiroclient.mods;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -60,46 +57,32 @@ public class teleportMod extends BaseMod implements ClientCommandRegistrationCal
 
         ClientPlayerEntity p = client.player;
 
-        Timer tpTimer = new Timer();
-
         distanceLeft = distance;
 
         // * For prod
         // ! When testing a fix, remove this.
-        if (distanceLeft > 10)
-            distanceLeft = 10;
+        // if (distanceLeft > 10)
+        // distanceLeft = 10;
 
-        tpTimer.scheduleAtFixedRate(new TimerTask() {
+        for (int i = 0; i < 9; i++) {
+            Utils.sendPacketImmediately(
+                    (new PlayerMoveC2SPacket.PositionAndOnGround(p.getX(), p.getY(),
+                            p.getZ(),
+                            true)));
+        }
 
-            @Override
-            public void run() {
-                if (distanceLeft <= 10) {
-                    this.cancel();
-                    return;
-                }
-                Vec3d targetPosition = p.getPos().add(p.getRotationVector().multiply(10));
+        Vec3d pos = p.getPos();
 
-                Utils.sendPacket(
-                        new PlayerMoveC2SPacket.PositionAndOnGround(targetPosition.x, targetPosition.y,
-                                targetPosition.z,
-                                true));
-                distanceLeft = distanceLeft - 10;
+        while (distanceLeft > 10) {
+            pos = pos.add(p.getRotationVector().multiply(9.9));
 
-                p.setPosition(targetPosition);
-
-                Utils.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(p.getX(),
-                        p.getY(), p.getZ(),
-                        true));
-
-                p.sendMessage(Text.of(String.format("%s distance left.", distanceLeft)), false);
-
-            }
-
-        }, 20, 20);
-
-        p.sendMessage(Text.of(String.format("%s distance left.", distanceLeft)), false);
-
-        Vec3d targetPosition = p.getPos().add(p.getRotationVector().multiply(distanceLeft));
+            Utils.sendPacketImmediately(
+                    (new PlayerMoveC2SPacket.PositionAndOnGround(pos.x, pos.y,
+                            pos.z,
+                            true)));
+            distanceLeft = distanceLeft - 10;
+        }
+        Vec3d targetPosition = p.getPos().add(p.getRotationVector().multiply(distance));
 
         p.setPosition(targetPosition);
 

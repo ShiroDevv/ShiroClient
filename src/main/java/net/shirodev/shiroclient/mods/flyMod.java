@@ -9,9 +9,13 @@ package net.shirodev.shiroclient.mods;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.FloatArgumentType;
+
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.text.Text;
 import net.shirodev.shiroclient.BaseMod;
@@ -19,7 +23,7 @@ import net.shirodev.shiroclient.Settings;
 import net.shirodev.shiroclient.Utils;
 
 //* Flyhack class
-public class flyMod extends BaseMod implements HudRenderCallback {
+public class flyMod extends BaseMod implements ClientCommandRegistrationCallback {
     public static flyMod INSTANCE;
 
     static Timer fallTimer = new Timer();
@@ -30,6 +34,12 @@ public class flyMod extends BaseMod implements HudRenderCallback {
     public flyMod() {
         super();
         INSTANCE = this;
+
+        ClientCommandRegistrationCallback.EVENT.register(this);
+    }
+
+    public void setFlySpeed(float speed) {
+        Settings.mc.player.getAbilities().setFlySpeed(speed);
     }
 
     // * Toggle to run the mod, if enabled
@@ -38,7 +48,10 @@ public class flyMod extends BaseMod implements HudRenderCallback {
         // * Quicker way to change it from true -> false, or false -> true
         super.toggle();
 
-        Settings.player = MinecraftClient.getInstance().player;
+        if (Settings.mc.player == null)
+            return;
+
+        Settings.player = Settings.mc.player;
 
         // * If the module got enabled
         if (enabled == true) {
@@ -57,11 +70,11 @@ public class flyMod extends BaseMod implements HudRenderCallback {
                 @Override
                 public void run() {
                     // * If the player doesn't exist, cancel the mod
-                    if (Settings.player == null) {
-                        this.cancel();
-                        return;
-                    }
+                    if (Settings.mc.player != null) {
+                        Settings.player = Settings.mc.player;
 
+                    } else
+                        return;
                     // * If the player isn't flying, ignore this
                     if (!Settings.player.getAbilities().flying)
                         return;
@@ -112,12 +125,18 @@ public class flyMod extends BaseMod implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        client.player.sendMessage(Text.of("Drawing!"), false);
+    public void register(CommandDispatcher<FabricClientCommandSource> dispatcher,
+            CommandRegistryAccess registryAccess) {
+        dispatcher.register(ClientCommandManager.literal("flySpeed")
+                .then(ClientCommandManager.argument("flySpeed", FloatArgumentType.floatArg()).executes(context -> {
+                    float flySpeed = context.getArgument("flySpeed",
+                            float.class);
 
-        // if (enabled == true) {
-        client.inGameHud.getTextRenderer().drawWithShadow(matrixStack, "fly", 100, 100, 0, false);
-        // }
+                    setFlySpeed(flySpeed);
+                    return 1;
+                })).executes(context -> {
+                    context.getSource().sendError(Text.of("Missing flySpeed"));
+                    return 1;
+                }));
     }
 }

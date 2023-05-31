@@ -29,7 +29,7 @@ public class Utils {
     }
 
     public static void sendPacketImmediately(Packet<?> packet) {
-        ((PacketManager) MinecraftClient.getInstance().getNetworkHandler()).sendImmediately(packet, null);
-
+        ((PacketManager) MinecraftClient.getInstance().getNetworkHandler().getConnection())._sendImmediately(packet,
+                null);
     }
 }
