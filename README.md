@@ -1,5 +1,9 @@
 # ShiroClient
 
+# After the 1.20 update, I have decided I don't want to continue with java.
+Im still going to do other things, I just dont want to keep this updated.
+Might come back to the idea at some point
+
 ## A small client, mixing hacks with normal mods.
 
 ### Current mods
